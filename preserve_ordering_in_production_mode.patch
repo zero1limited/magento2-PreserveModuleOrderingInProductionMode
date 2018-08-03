@@ -1,0 +1,39 @@
+diff --git a/setup/src/Magento/Setup/Model/Installer.php b/setup/src/Magento/Setup/Model/Installer.php
+index ba85081..8550c35 100644
+--- a/setup/src/Magento/Setup/Model/Installer.php
++++ b/setup/src/Magento/Setup/Model/Installer.php
+@@ -38,6 +38,7 @@ use Magento\Setup\Module\Setup;
+ use Magento\Setup\Module\SetupFactory;
+ use Magento\Setup\Validator\DbValidator;
+ use Magento\Store\Model\Store;
++use Magento\Framework\App\State;
+ 
+ /**
+  * Class Installer contains the logic to install Magento application.
+@@ -363,6 +364,13 @@ class Installer
+         $this->deploymentConfigWriter->saveConfig($configData);
+     }
+ 
++    protected function isProductionMode($deploymentConfig)
++    {
++        // wanted to use \Magento\Deploy\Model\Mode but the class requires Symfony\Component\Console\Output\OutputInterface
++        // Symfony\Component\Console\Input\InputInterface which we don't have reference to at this point.
++        return State::MODE_PRODUCTION == (isset($deploymentConfig[State::PARAM_MODE]) ? $deploymentConfig[State::PARAM_MODE] : null);
++    }
++
+     /**
+      * Creates modules deployment configuration segment
+      *
+@@ -379,7 +387,11 @@ class Installer
+             ? $deploymentConfig[ConfigOptionsListConstants::KEY_MODULES] : [];
+         $enable = $this->readListOfModules($all, $request, self::ENABLE_MODULES);
+         $disable = $this->readListOfModules($all, $request, self::DISABLE_MODULES);
+-        $result = [];
++        if($this->isProductionMode($deploymentConfig))a{
++            $result = $currentModules;
++        }else{
++            $result = [];
++        }
+         foreach ($all as $module) {
+             if ((isset($currentModules[$module]) && !$currentModules[$module])) {
+                 $result[$module] = 0;
