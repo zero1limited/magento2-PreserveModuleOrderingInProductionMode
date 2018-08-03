@@ -29,7 +29,7 @@ index ba85081..8550c35 100644
          $enable = $this->readListOfModules($all, $request, self::ENABLE_MODULES);
          $disable = $this->readListOfModules($all, $request, self::DISABLE_MODULES);
 -        $result = [];
-+        if($this->isProductionMode($deploymentConfig))a{
++        if($this->isProductionMode($deploymentConfig)){
 +            $result = $currentModules;
 +        }else{
 +            $result = [];
