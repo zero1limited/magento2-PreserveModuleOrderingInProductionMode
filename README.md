@@ -10,7 +10,7 @@ This is because, as part of the upgrade command the code at: vendor/magento/mage
 **Why this is a problem**
 1. We use [Mdoq](https://www.mdoq.io/) which does our deployments for us, however after running the upgrade command there were changes to `app/etc/config.php` which meant further git checkouts failed.
 2. There may be a time where the ordering of modules causes a bug, in this case you may have a bug in production that you can't replication in development because you haven't been lukcy/unlucky enough to get the same order of modules
-3. Production setup differs from what is know
+3. Production setup differs from what is known
 
 **Our solution** 
 We decided to only preserve the order of modules when the site is in production mode, this means that production config will be in version control and should be identical. This does however mean that when the site isn't in production mode the configuration order will be changed. Although this does generate a bigger diff than expected, at least it is known. An can be tested safely on a [Mdoq](https://www.mdoq.io/) development instance.
