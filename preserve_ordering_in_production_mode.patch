@@ -37,3 +37,4 @@ index ba85081..8550c35 100644
          foreach ($all as $module) {
              if ((isset($currentModules[$module]) && !$currentModules[$module])) {
                  $result[$module] = 0;
+
